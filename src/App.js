@@ -1,25 +1,38 @@
-import logo from './logo.svg';
-import './App.css';
+import './App.css'
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import Login from './myComponents/Login'
+import Home from './myComponents/Home'
+import Header from './myComponents/Header'
+import Search from './myComponents/Search'
+import Footer from './myComponents/Footer'
+import Moviebanner from './myComponents/Moviebanner'
+import { selectUsername } from './feature/user/userSlice'
+import { useSelector } from 'react-redux'
 
-function App() {
+function App () {
+  const username = useSelector(selectUsername)
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+     <Router>
+       <Header />
+        <Switch>
+          <Route exact path="/">
+            <Login />
+          </Route>
+          <Route exact path="/search">
+            <Search />
+          </Route>
+          <Route exact path="/home">
+            {username ? <Home /> : <Login />}
+          </Route>
+          <Route exact path="/movie/:id/:category">
+            <Moviebanner />
+          </Route>
+        </Switch>
+        <Footer />
+     </Router>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
