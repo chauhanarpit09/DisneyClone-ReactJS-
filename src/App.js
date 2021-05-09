@@ -17,7 +17,7 @@ function App () {
        <Header />
         <Switch>
           <Route exact path="/">
-            <Login />
+            {username ? <Home /> : <Login />}
           </Route>
           <Route exact path="/search">
             <Search />

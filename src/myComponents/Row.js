@@ -61,18 +61,25 @@ function Row (props) {
   function truncate (str, n) {
     return str?.length > n ? str.substr(0, n - 1) + '..' : str
   }
+
   if (movies) {
     return (
         <>
-        { movies
+        { movies.length !== 0
           ? <div style={{ maxheight: '250px' }}><br/>
-            <h2>{ props.title }</h2>
+            {movies ? <h2>{ props.title }</h2> : '' }
             <MovieRow {...settings}>
                 {movies.map(movie => (
                 <div key={movie.id}>
                     <Link to={`/movie/${movie.id}/${movie.first_air_date ? 'show' : 'movie'}`}>
                       <Conatiner>
-                        <Link to={`/movie/${movie.id}/${movie.first_air_date ? 'show' : 'movie'}`}><Image className="image" src={`${baseUrl}${movie.poster_path}`} alt=" "/></Link>
+                        <Link to={`/movie/${movie.id}/${movie.first_air_date ? 'show' : 'movie'}`}>
+                          <Image
+                            className="image"
+                            src={`${baseUrl}${movie.poster_path}`}
+                            onError={(e) => { e.target.onerror = null; e.target.src = './assets/images/default.jpg' }}
+                            alt=" "/>
+                        </Link>
                         <Hover className="info">
                             <h5>{movie?.original_title || movie?.title || movie?.name}<span><StarsIcon style={{ fontSize: '14px' }}/>&nbsp;{movie?.vote_average}</span></h5>
                             <p>{truncate(movie?.overview, 50)}</p><br/>

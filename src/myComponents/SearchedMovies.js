@@ -37,6 +37,7 @@ const MovieContainer = styled.div`
 
     @media (max-width : 800px){
         grid-template-columns: auto auto;
+        margin-left: -30px;
     }
 `
 const Detail = styled.div`

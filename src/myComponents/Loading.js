@@ -17,7 +17,7 @@ function Loading () {
 }
 
 const Container = styled.div`
-    height: 100vh;
+    height: 20vh;
     width: 100vw;
     display: flex;
     flex-direction: column;

@@ -7,22 +7,27 @@ import YouTube from 'react-youtube'
 import HighlightOffIcon from '@material-ui/icons/HighlightOff'
 import { IconButton } from '@material-ui/core'
 import Loading from './Loading'
+import db from '../firebasecon'
+import { selectUseremail } from '../feature/user/userSlice'
+import { useSelector } from 'react-redux'
+import firebase from 'firebase'
 
 const baseUrl = 'https://image.tmdb.org/t/p/original/'
 
 function Moviebanner () {
+  const [i, seti] = useState(0)
   const { id } = useParams()
   const { category } = useParams()
   const request = {
     getdetails: `/movie/${id}?api_key=d2ae966b0bae2a9f7dbc2a38133cb0f8&language=en-US`,
-    fetchsimilar: `/movie/${id}/similar?api_key=d2ae966b0bae2a9f7dbc2a38133cb0f8&language=en-US&page=1`,
+    fetchsimilar: `/movie/${id}/similar?api_key=d2ae966b0bae2a9f7dbc2a38133cb0f8&page=1`,
     getshowdetails: `/tv/${id}?api_key=d2ae966b0bae2a9f7dbc2a38133cb0f8&language=en-US`,
     getsimilarmovie: `/movie/${id}/similar?api_key=d2ae966b0bae2a9f7dbc2a38133cb0f8&page=1`,
     getsimilartv: `/tv/${id}/similar?api_key=d2ae966b0bae2a9f7dbc2a38133cb0f8&language=en-US&page=1`,
-    getrecommendedmovie: `/movie/${id}/recommendations?api_key=d2ae966b0bae2a9f7dbc2a38133cb0f8&language=en-US&page=1`,
-    getrecommendedtv: `/tv/${id}/recommendations?api_key=d2ae966b0bae2a9f7dbc2a38133cb0f8&language=en-US&page=1`,
-    gettrailertv: `/tv/${id}/videos?api_key=d2ae966b0bae2a9f7dbc2a38133cb0f8&language=en-US`,
-    gettrailermovie: `/movie/${id}/videos?api_key=d2ae966b0bae2a9f7dbc2a38133cb0f8&language=en-US`
+    getrecommendedmovie: `/movie/${id}/recommendations?api_key=d2ae966b0bae2a9f7dbc2a38133cb0f8&page=1`,
+    getrecommendedtv: `/tv/${id}/recommendations?api_key=d2ae966b0bae2a9f7dbc2a38133cb0f8&page=1`,
+    gettrailertv: `/tv/${id}/videos?api_key=d2ae966b0bae2a9f7dbc2a38133cb0f8`,
+    gettrailermovie: `/movie/${id}/videos?api_key=d2ae966b0bae2a9f7dbc2a38133cb0f8`
 
   }
   const [detail, setdetail] = useState({})
@@ -30,6 +35,7 @@ function Moviebanner () {
   const [recommend, setrecommend] = useState()
   const [trailer, settrailer] = useState()
   const [trailerurl, settrailerurl] = useState()
+  const useremail = useSelector(selectUseremail)
   if (category === 'movie') {
     useEffect(() => {
       async function fetchData () {
@@ -85,13 +91,26 @@ function Moviebanner () {
 
   function play () {
     if (trailer.length > 0) {
-      settrailerurl(trailer[0].key)
+      settrailerurl(trailer[i].key)
       document.getElementById('p').style.display = 'block'
       document.getElementById('p').style.width = '90vw'
       document.getElementById('p').style.height = '100vh'
       document.getElementById('container').style.opacity = '0'
     } else {
-      alert('no Trailer Available')
+      document.getElementById('notrailer').style.visibility = 'visible'
+      document.getElementById('notrailer').style.opacity = '1'
+    }
+    if (category === 'movie' && i === 0) {
+      db.collection('user').doc(useremail).collection(category).add({
+        movieid: id,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+      })
+    }
+    if (category === 'show' && i === 0) {
+      db.collection('user').doc(useremail).collection(category).add({
+        tvid: id,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+      })
     }
   }
 
@@ -102,10 +121,23 @@ function Moviebanner () {
     document.getElementById('p').style.height = '0vh'
     document.getElementById('container').style.opacity = '1'
   }
+
+  function nextrailer () {
+    // eslint-disable-next-line prefer-const
+    let p = i + 1
+    if (p < trailer.length) { seti(p) } else { seti(0) }
+    hide()
+    play()
+  }
   if (detail && similar && recommend) {
     return (
         <>
         <Container>
+             <center>
+                <Notrailer id = "notrailer">
+                    <h2>Sorry! Trailer UnAvaialble</h2>
+                </Notrailer>
+              </center>
             <Background id="container">
                 <img alt={detail.title} src={`${baseUrl}${detail?.backdrop_path || detail?.poster_path}`}/>
             </Background>
@@ -122,7 +154,8 @@ function Moviebanner () {
                             <span>Trailer</span>
                         </Trailer>
                     </a>
-                    <AddList>
+                    <AddList onClick = {() => nextrailer()}>
+                      {i}
                     </AddList>
                 </Controls>
                 <Dessc>{detail.overview}</Dessc>
@@ -269,6 +302,24 @@ const Dessc = styled.div`
   @media (max-width: 768px) {
     font-size: 14px;
   }
+`
+const Notrailer = styled.div`
+    background-color: #f0ad4e;
+    border-radius: 5px;
+    width: 40%;
+    height: 20% auto;
+    text-align : center;
+    padding: 3px;
+    margin: 6px;
+    visibility: visible;
+    opacity: 0;
+    transition: visibility 0s, opacity 0.5s ease-in;
+
+    @media (max-width: 1000px) {
+      width: 100%;
+      margin: 3px;
+      height: 10% ;
+    }
 `
 
 export default Moviebanner

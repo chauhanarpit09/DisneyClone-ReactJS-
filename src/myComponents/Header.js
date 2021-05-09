@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import styled from 'styled-components'
-import { auth, provider } from '../firebasecon'
+import db, { auth, provider } from '../firebasecon'
+import firebase from 'firebase'
 import { selectUsername, selectUserphoto, setUserLoginDetails, setSignOutState } from '../feature/user/userSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory, Link } from 'react-router-dom'
@@ -28,9 +29,22 @@ function Header () {
         .signInWithPopup(provider)
         .then((result) => {
           setUser(result.user)
-          history.push('/home')
+
+          db.collection('user')
+            .doc(result.user.email)
+            .get()
+            .then(doc => {
+              if (!doc.exists) {
+                db.collection('user')
+                  .doc(result.user.email)
+                  .set({
+                    name: result.user.displayName,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                  })
+              }
+            })
         })
-        .catch((error) => alert(error.message))
+      history.push('/home')
     }
   }
 

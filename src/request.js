@@ -7,7 +7,10 @@ const request = {
   fetchratedshows: `/tv/top_rated?api_key=${APIkey}&page=1`,
   fetchpopularshows: `/tv/popular?api_key=${APIkey}&page=1`,
   fetchtvshowtrailer: `/tv/{tv_id}/similar?api_key=${APIkey}&page=1`,
-  fetchupcoming: `/movie/upcoming?api_key=${APIkey}&language=en-US&page=1`
+  fetchupcoming: `/movie/upcoming?api_key=${APIkey}&language=en-US&page=1`,
+  fetchpopularhindi: `/movie/popular?api_key=${APIkey}&page=1&with_original_language=hi`,
+  fetchpopulartvhindi: `/tv/popular?api_key=${APIkey}&page=1&with_original_language=hi`,
+  fetchratedhindishows: `/tv/top_rated?api_key=${APIkey}&page=1&with_original_language=hi`
 }
 
 export default request
