@@ -39,14 +39,22 @@ function MoviewRows () {
   //  <Row title = {''} fetchurl= {req.getrecommendedtv} category = 'show' id="recommend"/>
   // <Row title = {'Recommended for you'} fetchurl= {req.getrecommendedtv} category = 'show' id="recommend"/>
   const req = {
-    getrecommendedmovie: `/movie/${movieid && movieid[0]?.data.movieid}/recommendations?api_key=d2ae966b0bae2a9f7dbc2a38133cb0f8&page=1`,
-    getrecommendedtv: `/tv/${tvid && tvid[0]?.data.tvid}}/recommendations?api_key=d2ae966b0bae2a9f7dbc2a38133cb0f8&page=1`
+    getrecommendedmovie1: `/movie/${movieid && movieid[0]?.data.movieid}/recommendations?api_key=d2ae966b0bae2a9f7dbc2a38133cb0f8&page=1`,
+    getrecommendedtv1: `/tv/${tvid && tvid[0]?.data.tvid}}/recommendations?api_key=d2ae966b0bae2a9f7dbc2a38133cb0f8&page=1`,
+    getrecommendedmovie2: `/movie/${movieid && movieid[1]?.data.movieid}/recommendations?api_key=d2ae966b0bae2a9f7dbc2a38133cb0f8&page=1`,
+    getrecommendedtv2: `/tv/${tvid && tvid[1]?.data.tvid}}/recommendations?api_key=d2ae966b0bae2a9f7dbc2a38133cb0f8&page=1`,
+    getrecommendedmovie3: `/movie/${movieid && movieid[2]?.data.movieid}/recommendations?api_key=d2ae966b0bae2a9f7dbc2a38133cb0f8&page=1`,
+    getrecommendedtv3: `/tv/${tvid && tvid[2]?.data.tvid}}/recommendations?api_key=d2ae966b0bae2a9f7dbc2a38133cb0f8&page=1`
   }
   return (
         <Container>
             {movieid.length !== 0
               ? (
-                <Row title = {'Recommended for you'} fetchurl= {req.getrecommendedmovie} category = 'movie'/>
+                <>
+                  <Row title = {'Recommended for you'} fetchurl= {req.getrecommendedmovie1} category = 'movie'/>
+                  <Row title = {''} fetchurl= {req.getrecommendedmovie2} category = 'movie'/>
+                  <Row title = {''} fetchurl= {req.getrecommendedmovie3} category = 'movie'/>
+                </>
                 )
               : (
                 <None></None>
@@ -54,7 +62,11 @@ function MoviewRows () {
             }
             {movieid.length === 0 && tvid.length !== 0
               ? (
-                <Row title = {'Recommended for you'} fetchurl= {req.getrecommendedtv} category = 'show'/>
+                <>
+                  <Row title = {'Recommended for you'} fetchurl= {req.getrecommendedtv1} category = 'show'/>
+                  <Row title = {''} fetchurl= {req.getrecommendedtv2} category = 'show'/>
+                  <Row title = {''} fetchurl= {req.getrecommendedtv3} category = 'show'/>
+                </>
                 )
               : (
                 <None></None>
@@ -62,7 +74,11 @@ function MoviewRows () {
             }
             {movieid.length !== 0 && tvid.length !== 0
               ? (
-                <Row title = {''} fetchurl= {req.getrecommendedtv} category = 'show'/>
+                <>
+                  <Row title = {''} fetchurl= {req.getrecommendedtv1} category = 'show'/>
+                  <Row title = {''} fetchurl= {req.getrecommendedtv2} category = 'show'/>
+                  <Row title = {''} fetchurl= {req.getrecommendedtv3} category = 'show'/>
+                </>
                 )
               : (
                 <None></None>

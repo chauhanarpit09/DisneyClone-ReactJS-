@@ -100,18 +100,6 @@ function Moviebanner () {
       document.getElementById('notrailer').style.visibility = 'visible'
       document.getElementById('notrailer').style.opacity = '1'
     }
-    if (category === 'movie' && i === 0) {
-      db.collection('user').doc(useremail).collection(category).add({
-        movieid: id,
-        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-      })
-    }
-    if (category === 'show' && i === 0) {
-      db.collection('user').doc(useremail).collection(category).add({
-        tvid: id,
-        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-      })
-    }
   }
 
   function hide () {
@@ -120,13 +108,29 @@ function Moviebanner () {
     document.getElementById('p').style.width = '0vw'
     document.getElementById('p').style.height = '0vh'
     document.getElementById('container').style.opacity = '1'
+    return 'a'
   }
 
-  function nextrailer () {
+  function adddatatrailer () {
+    if (category === 'movie' && i === 0) {
+      db.collection('user').doc(useremail).collection(category).doc(id).set({
+        movieid: id,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+      })
+    }
+    if (category === 'show' && i === 0) {
+      db.collection('user').doc(useremail).collection(category).doc(id).set({
+        tvid: id,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+      })
+    }
+  }
+
+  async function nextrailer () {
     // eslint-disable-next-line prefer-const
     let p = i + 1
     if (p < trailer.length) { seti(p) } else { seti(0) }
-    hide()
+    await hide()
     play()
   }
   if (detail && similar && recommend) {
@@ -148,7 +152,7 @@ function Moviebanner () {
                         <img src = 'https://www.linkpicture.com/q/play-icon-black.png' alt=" " />
                         <span>Play</span>
                     </Player>
-                    <a href="#p" onClick = {() => play()}>
+                    <a href="#p" onClick = {function (event) { play(); adddatatrailer() }}>
                         <Trailer>
                             <img src = 'https://www.linkpicture.com/q/play-icon-white.png' alt=" " />
                             <span>Trailer</span>

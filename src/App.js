@@ -20,13 +20,13 @@ function App () {
             {username ? <Home /> : <Login />}
           </Route>
           <Route exact path="/search">
-            <Search />
+            {username ? <Search /> : <Login />}
           </Route>
           <Route exact path="/home">
             {username ? <Home /> : <Login />}
           </Route>
           <Route exact path="/movie/:id/:category">
-            <Moviebanner />
+            {username ? <Moviebanner /> : <Login />}
           </Route>
         </Switch>
         <Footer />

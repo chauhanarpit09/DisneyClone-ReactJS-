@@ -11,7 +11,11 @@ function SearchedMovies (props) {
                 {props.data && props.data.map(data => (
                     <Link to={`/movie/${data.id}/${data.first_air_date ? 'show' : 'movie'}`} key = {data.id }>
                         <Detail>
-                            <Image src={`${baseUrl}${data?.poster_path || data?.backdrop_path}`} alt = {data.original_title} />
+                            <Image
+                            src={`${baseUrl}${data?.poster_path || data?.backdrop_path}`}
+                            onError={(e) => { e.target.onerror = null; e.target.src = './assets/images/default.jpg' }}
+                            alt = {data.original_title}
+                            loading="lazy"/>
                             <Title>
                                 <h5>{data?.original_title || data?.title || data?.name}</h5></Title>
                         </Detail>
@@ -28,15 +32,15 @@ const Container = styled.div`
 `
 const MovieContainer = styled.div`
     display: grid;
-    grid-template-columns: auto auto auto auto auto auto;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
     width: 98%;
     hieght: 100%;
     @media (max-width : 1200px){
-        grid-template-columns: auto auto auto auto auto;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
     }
 
     @media (max-width : 800px){
-        grid-template-columns: auto auto;
+        grid-template-columns: 1fr 1fr;
         margin-left: -30px;
     }
 `

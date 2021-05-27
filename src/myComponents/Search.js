@@ -20,12 +20,10 @@ function Search () {
     return req
   }
 
-  const search = (e, str) => {
-    if (str !== '') {
-      setquery(str)
+  const search = (e) => {
+    if (query !== '') {
       e.preventDefault()
       setdata('')
-      console.log(query)
       request = {
         search: `/search/multi?api_key=d2ae966b0bae2a9f7dbc2a38133cb0f8&query=${query}&page=1&include_adult=false`
       }
@@ -41,8 +39,8 @@ function Search () {
             <FormContainer>
                 <Formthings>
                     <Form>
-                        <IconButton onClick={search} type="submit"><Searchicon /></IconButton>
-                        <input type="text" value = {query} onChange = {(e) => { search(e, e.target.value) }} placeholder="Search.." />
+                        <IconButton onClick={(e) => { search(e) } } type="submit"><Searchicon /></IconButton>
+                        <input type="text" value = {query} onChange = {(e) => { setquery(e.target.value) }} placeholder="Type and click on search icon" />
                     </Form>
                 </Formthings>
             </FormContainer>

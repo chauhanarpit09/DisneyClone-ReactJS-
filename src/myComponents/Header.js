@@ -18,7 +18,6 @@ function Header () {
     auth.onAuthStateChanged(async (user) => {
       if (user) {
         setUser(user)
-        history.push('/home')
       }
     })
   }, [username])

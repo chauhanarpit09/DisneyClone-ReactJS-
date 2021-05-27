@@ -78,6 +78,7 @@ function Row (props) {
                             className="image"
                             src={`${baseUrl}${movie.poster_path}`}
                             onError={(e) => { e.target.onerror = null; e.target.src = './assets/images/default.jpg' }}
+                            loading = 'lazy'
                             alt=" "/>
                         </Link>
                         <Hover className="info">
